@@ -3,12 +3,25 @@ using UnityEngine.UI;
 
 public class EstadisticasEsbirro : MonoBehaviour
 {
-    [SerializeField] public int Coste;
-    [SerializeField] public int Ataque;
-    [SerializeField] public int Salud;
+    //Campos Visibles
     [SerializeField] public string Nombre;
     [SerializeField] public string Descripcion;
     [SerializeField] public Texture Imagen;
+
+    //Estadisticas
+    [SerializeField] public int Coste;
+    [SerializeField] public int Ataque;
+    [SerializeField] public int Salud;
+
+    //Propiedades
+    public bool CartaJugada;
+    public bool CartaDormida;
+    public int NumeroAtaques;
+    [SerializeField] public bool Cargar;
+    [SerializeField] public bool Provocar;
+    [SerializeField] public bool Veneno;
+    [SerializeField] public bool EscudoDivino;
+    [SerializeField] public bool Sigilo;
 
     void Update()
     {
@@ -18,5 +31,9 @@ public class EstadisticasEsbirro : MonoBehaviour
         transform.GetChild(3).GetComponent<Text>().text = Nombre.ToString();
         transform.GetChild(4).GetComponent<Text>().text = Descripcion.ToString();
         transform.GetChild(5).GetComponent<RawImage>().texture = Imagen;
+
+        CartaJugada = false;
+        CartaDormida = Cargar ? false : true;
+        NumeroAtaques = 1;
     }
 }
