@@ -4,9 +4,9 @@ using UnityEngine.UI;
 
 public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler, IEndDragHandler
 {
-    public Transform ManoJugador;
-    public Transform TableroJugadorTemporal;
-    public GameObject tempCard;
+    public Transform ManoJugador { get; set; }
+    public Transform TableroJugadorTemporal { get; set; }
+    public GameObject tempCard { get; set; }
 
     int TamañoTablero;
     int TamañoMaximo;
@@ -19,13 +19,15 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-
-        CrearCartaTemporal();
-        ManoJugador = transform.parent;
-        TableroJugadorTemporal = ManoJugador;
-        transform.SetParent(transform.root);
-        GetComponent<CanvasGroup>().blocksRaycasts = false;
-
+        if (!GetComponent<EstadisticasEsbirro>().CartaJugada &&
+            transform.parent.name != "TableroEnemigo")
+        {
+            CrearCartaTemporal();
+            ManoJugador = transform.parent;
+            TableroJugadorTemporal = ManoJugador;
+            transform.SetParent(transform.root);
+            GetComponent<CanvasGroup>().blocksRaycasts = false;
+        }
     }
 
     public void CrearCartaTemporal()
@@ -62,32 +64,36 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnDrag(PointerEventData eventData)
     {
+        if (!GetComponent<EstadisticasEsbirro>().CartaJugada &&
+            transform.parent.name != "TableroEnemigo")
+        {
+            transform.position = eventData.position;
 
-        transform.position = eventData.position;
+            if (tempCard.transform.parent != TableroJugadorTemporal)
+                tempCard.transform.SetParent(TableroJugadorTemporal);
 
-        if (tempCard.transform.parent != TableroJugadorTemporal)
-            tempCard.transform.SetParent(TableroJugadorTemporal);
-
-        MoverCartaEnMano();
-
+            MoverCartaEnMano();
+        }
     }
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
-        if (TamañoTablero <= TamañoMaximo)
+        if (transform.parent.name != "TableroEnemigo")
         {
-            transform.SetParent(ManoJugador);
+            if (TamañoTablero <= TamañoMaximo)
+            {
+                transform.SetParent(ManoJugador);
 
-            if (transform != null && tempCard != null)
-                transform.SetSiblingIndex(tempCard.transform.GetSiblingIndex());
-        }
-        else
-        {
-            transform.SetParent(GameObject.Find("ManoJugador").transform);
-        }
+                if (transform != null && tempCard != null)
+                    transform.SetSiblingIndex(tempCard.transform.GetSiblingIndex());
+            }
+            else
+            {
+                transform.SetParent(GameObject.Find("ManoJugador").transform);
+            }
 
-        Destroy(tempCard);
-        GetComponent<CanvasGroup>().blocksRaycasts = true;
+            Destroy(tempCard);
+            GetComponent<CanvasGroup>().blocksRaycasts = true;
+        }
     }
 }

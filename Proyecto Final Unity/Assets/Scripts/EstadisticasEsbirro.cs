@@ -6,7 +6,6 @@ public class EstadisticasEsbirro : MonoBehaviour
     //Campos Visibles
     [SerializeField] public string Nombre;
     [SerializeField] public string Descripcion;
-    [SerializeField] public Texture Imagen;
 
     //Estadisticas
     [SerializeField] public int Coste;
@@ -23,6 +22,12 @@ public class EstadisticasEsbirro : MonoBehaviour
     [SerializeField] public bool EscudoDivino;
     [SerializeField] public bool Sigilo;
 
+    private void Start()
+    {
+        CartaJugada = false;
+        CartaDormida = Cargar ? false : true;
+        NumeroAtaques = 1;
+    }
     void Update()
     {
         transform.GetChild(0).GetComponent<Text>().text = Coste.ToString();
@@ -30,10 +35,5 @@ public class EstadisticasEsbirro : MonoBehaviour
         transform.GetChild(2).GetComponent<Text>().text = Salud.ToString();
         transform.GetChild(3).GetComponent<Text>().text = Nombre.ToString();
         transform.GetChild(4).GetComponent<Text>().text = Descripcion.ToString();
-        transform.GetChild(5).GetComponent<RawImage>().texture = Imagen;
-
-        CartaJugada = false;
-        CartaDormida = Cargar ? false : true;
-        NumeroAtaques = 1;
     }
 }

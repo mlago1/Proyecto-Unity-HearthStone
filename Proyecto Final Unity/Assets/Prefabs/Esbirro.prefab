@@ -1,97 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6101472904325883629
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6101472904325883630}
-  - component: {fileID: 6101472904325883600}
-  - component: {fileID: 6101472904325883631}
-  - component: {fileID: 6101472904325883601}
-  m_Layer: 5
-  m_Name: Imagen
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &6101472904325883630
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6101472904325883629}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 6101472905280463812}
-  m_RootOrder: 5
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 1.8, y: 16.9}
-  m_SizeDelta: {x: 60, y: 60}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!222 &6101472904325883600
-CanvasRenderer:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6101472904325883629}
-  m_CullTransparentMesh: 0
---- !u!114 &6101472904325883631
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6101472904325883629}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_RaycastTarget: 1
-  m_OnCullStateChanged:
-    m_PersistentCalls:
-      m_Calls: []
-  m_Texture: {fileID: 0}
-  m_UVRect:
-    serializedVersion: 2
-    x: 0
-    y: 0
-    width: 1
-    height: 1
---- !u!223 &6101472904325883601
-Canvas:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6101472904325883629}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_RenderMode: 2
-  m_Camera: {fileID: 0}
-  m_PlaneDistance: 100
-  m_PixelPerfect: 0
-  m_ReceivesEvents: 1
-  m_OverrideSorting: 1
-  m_OverridePixelPerfect: 0
-  m_SortingBucketNormalizedSize: 0
-  m_AdditionalShaderChannelsFlag: 0
-  m_SortingLayerID: 0
-  m_SortingOrder: 0
-  m_TargetDisplay: 0
 --- !u!1 &6101472904761984191
 GameObject:
   m_ObjectHideFlags: 0
@@ -182,6 +90,7 @@ GameObject:
   - component: {fileID: 6101472905280463815}
   - component: {fileID: 6101472905280463813}
   - component: {fileID: 7462011862329249487}
+  - component: {fileID: -3128879239158259241}
   - component: {fileID: -882324958128220842}
   - component: {fileID: 884022507158170031}
   m_Layer: 5
@@ -200,14 +109,13 @@ RectTransform:
   m_GameObject: {fileID: 6101472905280463811}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 2, y: 3, z: 3}
+  m_LocalScale: {x: 2.5, y: 4, z: 3}
   m_Children:
   - {fileID: 6101472904761984160}
   - {fileID: 6101472905319394483}
   - {fileID: 6101472905704731202}
   - {fileID: 6101472905386920190}
   - {fileID: 6101472905874762752}
-  - {fileID: 6101472904325883630}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -236,12 +144,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040cf3b7f4e7cad4fba7dcfe46d2b33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Nombre: Pipo
+  Descripcion: Patata
   Coste: 5
   Ataque: 5
   Salud: 5
-  Nombre: Pipo
-  Descripcion: Patata
-  Imagen: {fileID: 2800000, guid: f5d98d6a89322fd4795a9429457c8dcc, type: 3}
+  CartaJugada: 0
+  CartaDormida: 0
+  NumeroAtaques: 0
+  Cargar: 0
+  Provocar: 0
+  Veneno: 0
+  EscudoDivino: 0
+  Sigilo: 0
 --- !u!114 &6101472905280463813
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -279,9 +194,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3b1bbe04fbb47f7418de3f6f042bbfbf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ManoJugador: {fileID: 0}
-  TableroJugadorTemporal: {fileID: 0}
-  tempCard: {fileID: 0}
+--- !u!114 &-3128879239158259241
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6101472905280463811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 57909d1653c276b4485c6264bb90644f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!225 &-882324958128220842
 CanvasGroup:
   m_ObjectHideFlags: 0
