@@ -116,6 +116,7 @@ RectTransform:
   - {fileID: 6101472905704731202}
   - {fileID: 6101472905386920190}
   - {fileID: 6101472905874762752}
+  - {fileID: 6218130625444071931}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -144,11 +145,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 040cf3b7f4e7cad4fba7dcfe46d2b33d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Nombre: Pipo
-  Descripcion: Patata
-  Coste: 5
-  Ataque: 5
-  Salud: 5
+  Nombre: Ejemplo
+  Descripcion: Ejemplo
+  Imagen: {fileID: 0}
+  Dorso: {fileID: 2800000, guid: 356c75f528940e947b1e75828c9dd2f7, type: 3}
+  Coste: 1
+  Ataque: 1
+  Salud: 1
+  CartaOculta: 0
   CartaJugada: 0
   CartaDormida: 0
   NumeroAtaques: 0
@@ -546,3 +550,73 @@ MonoBehaviour:
     m_VerticalOverflow: 0
     m_LineSpacing: 1
   m_Text: 
+--- !u!1 &6107174427862125979
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6218130625444071931}
+  - component: {fileID: 349468137512985854}
+  - component: {fileID: 7774657000569466959}
+  m_Layer: 5
+  m_Name: EscudoDivino
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!224 &6218130625444071931
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107174427862125979}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.364, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 6101472905280463812}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!222 &349468137512985854
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107174427862125979}
+  m_CullTransparentMesh: 0
+--- !u!114 &7774657000569466959
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6107174427862125979}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Texture: {fileID: 2800000, guid: 6037d04f445fa374cb05f948f4fab035, type: 3}
+  m_UVRect:
+    serializedVersion: 2
+    x: 0
+    y: 0
+    width: 1
+    height: 1

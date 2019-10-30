@@ -13,7 +13,8 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void Update()
     {
-        TamañoTablero = GameObject.Find("TableroJugador").transform.childCount;
+        TamañoTablero = GameObject.Find("TableroJugador")
+            .transform.childCount;
         TamañoMaximo = GameController.MaxCartasTablero;
     }
 
@@ -90,6 +91,7 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
             else
             {
                 transform.SetParent(GameObject.Find("ManoJugador").transform);
+                GetComponent<EstadisticasEsbirro>().CartaJugada = false;
             }
 
             Destroy(tempCard);
