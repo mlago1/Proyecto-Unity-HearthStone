@@ -63,10 +63,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\Scripts\Botones.cs" />
     <Compile Include="Assets\Scripts\EsbirroArrastrable.cs" />
     <Compile Include="Assets\Scripts\EsbirroAtacante.cs" />
     <Compile Include="Assets\Scripts\EstadisticasEsbirro.cs" />
+    <Compile Include="Assets\Scripts\EstadisticasHeroe.cs" />
     <Compile Include="Assets\Scripts\GameController.cs" />
+    <Compile Include="Assets\Scripts\HeroeAtacable.cs" />
     <Compile Include="Assets\Scripts\ZonaCaidaCartas.cs" />
     <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Surface-Mobile.shader" />
     <None Include="Assets\TextMesh Pro\Resources\LineBreaking Leading Characters.txt" />

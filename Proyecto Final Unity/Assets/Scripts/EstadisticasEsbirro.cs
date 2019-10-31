@@ -3,7 +3,7 @@ using UnityEngine.UI;
 
 public class EstadisticasEsbirro : MonoBehaviour
 {
-    //Campos Visibles
+    //Campos Visuales
     [SerializeField] public string Nombre;
     [SerializeField] public string Descripcion;
     [SerializeField] public Texture Imagen;
@@ -33,6 +33,13 @@ public class EstadisticasEsbirro : MonoBehaviour
     }
     void Update()
     {
+        ActualizarDatos();
+        ComprobarPropiedades();
+        ActualizarCartasOcultas();
+    }
+
+    void ActualizarDatos()
+    {
         transform.GetChild(0).GetComponent<Text>()
             .text = Coste.ToString();
         transform.GetChild(1).GetComponent<Text>()
@@ -43,12 +50,18 @@ public class EstadisticasEsbirro : MonoBehaviour
             .text = Nombre.ToString();
         transform.GetChild(4).GetComponent<Text>()
             .text = Descripcion.ToString();
+    }
 
-        if (EscudoDivino && !CartaOculta)
-            transform.GetChild(5).gameObject.SetActive(true);
-        else
-            transform.GetChild(5).gameObject.SetActive(false);
+    void ComprobarPropiedades()
+    {
+        transform.GetChild(5).gameObject.SetActive(
+            EscudoDivino && !CartaOculta ? true : false);
+        transform.GetChild(6).gameObject.SetActive(
+            Sigilo && !CartaOculta ? true : false);
+    }
 
+    void ActualizarCartasOcultas()
+    {
         if (CartaOculta)
         {
             GetComponent<RawImage>().texture = Dorso;
@@ -60,6 +73,6 @@ public class EstadisticasEsbirro : MonoBehaviour
             GetComponent<RawImage>().texture = Imagen;
             for (int i = 0; i < 5; i++)
                 transform.GetChild(i).gameObject.SetActive(true);
-        } 
+        }
     }
 }

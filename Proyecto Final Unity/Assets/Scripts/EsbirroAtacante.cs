@@ -1,14 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
 {
-    void Start()
-    {
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (GetComponent<EstadisticasEsbirro>().Ataque == 0
@@ -62,13 +56,13 @@ public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
         }
         else if (FindObjectOfType<GameController>().HayCartaSeleccionada)
         {
-            if (!ComprobarExisteProvocar())
-                return;
-            if (!ComprobarTieneSigilo())
-                return;
-
             if (transform.parent.name == "TableroEnemigo")
             {
+                if (!ComprobarExisteProvocar())
+                    return;
+
+                if (!ComprobarTieneSigilo())
+                    return;
                 FindObjectOfType<GameController>()
                     .CartaObjetivo = transform;
                 FindObjectOfType<GameController>()
@@ -80,6 +74,10 @@ public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
                     .GetComponent<EstadisticasEsbirro>().YaHaAtacado = true;
                 FindObjectOfType<GameController>()
                     .CartaSeleccionada.GetComponent<CanvasGroup>().alpha = 1f;
+                FindObjectOfType<GameController>()
+                    .CartaSeleccionada = null;
+                FindObjectOfType<GameController>()
+                    .CartaObjetivo = null;
             }
         }
     }
@@ -97,7 +95,7 @@ public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
         return true;
     }
 
-    bool ComprobarExisteProvocar()
+    public bool ComprobarExisteProvocar()
     {
         if (!GetComponent<EstadisticasEsbirro>().Provocar)
         {

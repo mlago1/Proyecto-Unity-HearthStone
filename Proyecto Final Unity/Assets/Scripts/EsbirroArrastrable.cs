@@ -34,7 +34,7 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void CrearCartaTemporal()
     {
         tempCard = new GameObject();
-        tempCard.transform.SetParent(transform.root);
+        //tempCard.transform.SetParent(transform.root);
         tempCard.transform.position = transform.position;
         tempCard.transform.SetParent(transform.parent);
         LayoutElement le = tempCard.AddComponent<LayoutElement>();
@@ -81,17 +81,32 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
     {
         if (transform.parent.name != "TableroEnemigo")
         {
-            if (TamañoTablero <= TamañoMaximo)
+            if(GameObject.Find("HeroeJugador").GetComponent<EstadisticasHeroe>()
+                .ManaDisponible < transform.GetComponent<EstadisticasEsbirro>()
+                .Coste)
             {
-                transform.SetParent(ManoJugador);
-
-                if (transform != null && tempCard != null)
-                    transform.SetSiblingIndex(tempCard.transform.GetSiblingIndex());
+                GameObject.Find("GameController").GetComponent<GameController>()
+                    .MostrarMensaje("No tienes suficiente mana para jugar esa carta");
+                transform.SetParent(GameObject.Find("ManoJugador").transform);
+                GetComponent<EstadisticasEsbirro>().CartaJugada = false;
+            }
+            else if (TamañoTablero > TamañoMaximo)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>()
+                    .MostrarMensaje("No caben más esbirros en el tablero");
+                transform.SetParent(GameObject.Find("ManoJugador").transform);
+                GetComponent<EstadisticasEsbirro>().CartaJugada = false;
             }
             else
             {
-                transform.SetParent(GameObject.Find("ManoJugador").transform);
-                GetComponent<EstadisticasEsbirro>().CartaJugada = false;
+                transform.SetParent(ManoJugador);
+                if (transform != null && tempCard != null)
+                    transform.SetSiblingIndex(tempCard.transform.GetSiblingIndex());
+
+                if(transform.parent.name == "TableroJugador")
+                    GameObject.Find("HeroeJugador").GetComponent<EstadisticasHeroe>()
+                        .ManaDisponible -= transform.GetComponent<EstadisticasEsbirro>()
+                        .Coste;
             }
 
             Destroy(tempCard);
