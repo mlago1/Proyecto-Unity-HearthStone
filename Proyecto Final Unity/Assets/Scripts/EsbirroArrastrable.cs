@@ -21,8 +21,15 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void OnBeginDrag(PointerEventData eventData)
     {
         if (!GetComponent<EstadisticasEsbirro>().CartaJugada &&
-            transform.parent.name != "TableroEnemigo")
+            transform.parent.name != "TableroEnemigo" )
         {
+           if(GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>()
+                .MostrarMensaje("No es tu turno");
+                return;
+            }
             CrearCartaTemporal();
             ManoJugador = transform.parent;
             TableroJugadorTemporal = ManoJugador;
@@ -34,7 +41,6 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
     public void CrearCartaTemporal()
     {
         tempCard = new GameObject();
-        //tempCard.transform.SetParent(transform.root);
         tempCard.transform.position = transform.position;
         tempCard.transform.SetParent(transform.parent);
         LayoutElement le = tempCard.AddComponent<LayoutElement>();
@@ -68,6 +74,13 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
         if (!GetComponent<EstadisticasEsbirro>().CartaJugada &&
             transform.parent.name != "TableroEnemigo")
         {
+            if (GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>()
+                .MostrarMensaje("No es tu turno");
+                return;
+            }
             transform.position = eventData.position;
 
             if (tempCard.transform.parent != TableroJugadorTemporal)
@@ -79,8 +92,19 @@ public class EsbirroArrastrable : MonoBehaviour, IBeginDragHandler, IDragHandler
 
     public void OnEndDrag(PointerEventData eventData)
     {
-        if (transform.parent.name != "TableroEnemigo")
+        if (transform.parent.name != "TableroEnemigo" &&
+            !GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
         {
+            if (GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>()
+                .MostrarMensaje("No es tu turno");
+                return;
+            }
+            if (transform.parent.name == "TableroJugador")
+                return;
             if(GameObject.Find("HeroeJugador").GetComponent<EstadisticasHeroe>()
                 .ManaDisponible < transform.GetComponent<EstadisticasEsbirro>()
                 .Coste)

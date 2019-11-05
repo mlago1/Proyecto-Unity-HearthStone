@@ -11,7 +11,9 @@ public class GameController : MonoBehaviour
 {
     public static int MaxCartasTablero = 4;
     public static int MaxCartasMano = 4;
-    static int cartasRepetidasPorMazo = 2;
+    public static int TiempoTurnos = 40;
+    public static int TiempoPausa = 2;
+    static int cartasRepetidasPorMazo = 4;
 
     public Transform CartaSeleccionada { get; set; }
     public Transform CartaObjetivo { get; set; }
@@ -21,19 +23,21 @@ public class GameController : MonoBehaviour
     public Transform HeroeEnemigo { get; set; }
 
     public bool esTurnoJugador { get; set; }
+    public bool botonPulsado { get; set; }
 
     float tiempoPorTurno;
 
     void Start()
     {
         HayCartaSeleccionada = false;
-        tiempoPorTurno = 30;
+        tiempoPorTurno = TiempoTurnos;
         esTurnoJugador = true;
+        botonPulsado = false;
         HeroeJugador = GameObject.Find("HeroeJugador").transform;
         HeroeEnemigo = GameObject.Find("HeroeEnemigo").transform;
         CargarMazos();
-        RobarCarta(HeroeJugador,"MazoJugador","ManoJugador",false,3);
-        RobarCarta(HeroeEnemigo, "MazoEnemigo", "ManoEnemigo", true, 3);
+        StartCoroutine(RobarCarta(HeroeJugador,"MazoJugador","ManoJugador",false,3));
+        StartCoroutine(RobarCarta(HeroeEnemigo, "MazoEnemigo", "ManoEnemigo", true, 3));
         IniciarSiguienteTurno();
     }
 
@@ -73,7 +77,7 @@ public class GameController : MonoBehaviour
         tiempoPorTurno -= Time.deltaTime;
         if (tiempoPorTurno <= 0)
         {
-            esTurnoJugador = !esTurnoJugador;
+            esTurnoJugador = false;
             IniciarSiguienteTurno();
         }
     }
@@ -131,23 +135,61 @@ public class GameController : MonoBehaviour
 
     public void IniciarSiguienteTurno()
     {
-        tiempoPorTurno = 30;
-        if (esTurnoJugador)
+        if (botonPulsado)
         {
-            ActualizarMana(HeroeJugador);
-            ActivarCartasDormidas("TableroJugador");
-            RobarCarta(HeroeJugador,"MazoJugador","ManoJugador",false,1);
-            esTurnoJugador = false;
+            MostrarMensaje("No es tu turno");
+            return;
         }
+        tiempoPorTurno = TiempoTurnos;
+        if (esTurnoJugador)
+            StartCoroutine(TurnoJugador());
         else
         {
-            ActualizarMana(HeroeEnemigo);
-            ActivarCartasDormidas("TableroEnemigo");
-            RobarCarta(HeroeEnemigo,"MazoEnemigo", "ManoEnemigo",true,1);
-            HacerJugarEnemigo();
-            esTurnoJugador = true;
-            IniciarSiguienteTurno();
+            MostrarMensaje("Turno Enemigo");
+            StartCoroutine(TurnoEnemigo());
         }
+    }
+
+    IEnumerator TurnoJugador()
+    {
+        ActualizarMana(HeroeJugador);
+        ActivarCartasDormidas("TableroJugador");
+        StartCoroutine(RobarCarta(HeroeJugador, "MazoJugador", "ManoJugador", false, 1));
+        esTurnoJugador = false;
+        yield return new WaitForSeconds(TiempoPausa);
+        botonPulsado = false;
+        CartaObjetivo = null;
+        if(CartaSeleccionada != null)
+        {
+            CartaSeleccionada.GetComponent<CanvasGroup>()
+                .alpha = 1;
+            CartaSeleccionada = null;
+        }
+        MostrarMensaje("Tu Turno");
+
+        HayCartaSeleccionada = false;
+    }
+
+    IEnumerator TurnoEnemigo()
+    {
+        botonPulsado = true;
+        ActualizarMana(HeroeEnemigo);
+        ActivarCartasDormidas("TableroEnemigo");
+        StartCoroutine(RobarCarta(HeroeEnemigo, "MazoEnemigo", "ManoEnemigo", true, 1));
+        HacerJugarEnemigo();
+        esTurnoJugador = true;
+        yield return new WaitForSeconds(TiempoPausa*2);
+        botonPulsado = false;
+        CartaObjetivo = null;
+        if (CartaSeleccionada != null)
+        {
+            CartaSeleccionada.GetComponent<CanvasGroup>()
+                .alpha = 1;
+            CartaSeleccionada = null;
+        }
+
+        HayCartaSeleccionada = false;
+        IniciarSiguienteTurno();
     }
 
     void ActualizarMana(Transform heroe)
@@ -169,10 +211,11 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void RobarCarta(Transform heroe, string mazo, string mano, bool ocultarCarta, int numeroCartasRobar)
+    IEnumerator RobarCarta(Transform heroe, string mazo, string mano, bool ocultarCarta, int numeroCartasRobar)
     {
         for (int i = 0; i < numeroCartasRobar; i++)
         {
+            yield return new WaitForSeconds(TiempoPausa);
             System.Random r = new System.Random();
             int posicion = r.Next(
                 0, GameObject.Find(mazo).transform.childCount);
@@ -190,7 +233,7 @@ public class GameController : MonoBehaviour
                     .DañoFatiga;
                 heroe.GetComponent<EstadisticasHeroe>()
                     .DañoFatiga++;
-                return;
+                break;
             }
 
             cartaRobar = GameObject.Find(mazo).
@@ -207,120 +250,131 @@ public class GameController : MonoBehaviour
             {
                 cartaRobar.transform.SetParent(
                     GameObject.Find("Cementerio").transform);
-                if (mano == "ManoJugador")
-                    MostrarMensaje("No caben más cartas en la mano");
             }
         }
     }
 
     void HacerJugarEnemigo()
     {
-        EnemigoJugarCartas();
-        EnemigoAtacarCartas();
+        StartCoroutine(EnemigoJugarCartas());
+        StartCoroutine(EnemigoAtacarCartas());
     }
 
-    void EnemigoJugarCartas()
+    IEnumerator EnemigoJugarCartas()
     {
         if (GameObject.Find("TableroEnemigo").transform.childCount
-            >= MaxCartasTablero)
-            return;
-      
-
-        List<Transform> CartasJugables = new List<Transform>();
-        foreach (Transform carta in GameObject.Find("ManoEnemigo").transform)
+            < MaxCartasTablero)
         {
-            if (carta.GetComponent<EstadisticasEsbirro>()
-                .Coste <= HeroeEnemigo.GetComponent<EstadisticasHeroe>()
-                .ManaDisponible)
+            List<Transform> CartasJugables = new List<Transform>();
+            foreach (Transform carta in GameObject.Find("ManoEnemigo").transform)
             {
-                CartasJugables.Add(carta);
+                if (carta.GetComponent<EstadisticasEsbirro>()
+                    .Coste <= HeroeEnemigo.GetComponent<EstadisticasHeroe>()
+                    .ManaDisponible)
+                {
+                    CartasJugables.Add(carta);
+                }
             }
-        }
 
-        for (int i = 0; i < CartasJugables.Count; i++)
-        {
-            Transform temp = CartasJugables[i];
-            int randomIndex = UnityEngine.Random.Range(i, CartasJugables.Count);
-            CartasJugables[i] = CartasJugables[randomIndex];
-            CartasJugables[randomIndex] = temp;
-        }
-
-        List<Transform> CartasDefinitivas = new List<Transform>();
-        foreach (Transform carta in CartasJugables)
-        {
-            if(carta.GetComponent<EstadisticasEsbirro>()
-                .Coste > HeroeEnemigo.GetComponent<EstadisticasHeroe>()
-                .ManaDisponible)
-                continue;
-            else
+            for (int i = 0; i < CartasJugables.Count; i++)
             {
-                CartasDefinitivas.Add(carta);
-                HeroeEnemigo.GetComponent<EstadisticasHeroe>()
-                    .ManaDisponible -= carta.GetComponent<EstadisticasEsbirro>()
-                    .Coste;
+                Transform temp = CartasJugables[i];
+                int randomIndex = UnityEngine.Random.Range(i, CartasJugables.Count);
+                CartasJugables[i] = CartasJugables[randomIndex];
+                CartasJugables[randomIndex] = temp;
             }
-        }
-        foreach(Transform carta in CartasDefinitivas)
-        {
-            carta.SetParent(GameObject.Find("TableroEnemigo").transform);
-            carta.GetComponent<EstadisticasEsbirro>()
-                .CartaJugada = true;
-            carta.GetComponent<EstadisticasEsbirro>()
-                .CartaOculta = false;
 
-            if (GameObject.Find("TableroEnemigo").transform.childCount
-            >= MaxCartasTablero)
-                return;
+            List<Transform> CartasDefinitivas = new List<Transform>();
+            foreach (Transform carta in CartasJugables)
+            {
+                if (carta.GetComponent<EstadisticasEsbirro>()
+                    .Coste <= HeroeEnemigo.GetComponent<EstadisticasHeroe>()
+                    .ManaDisponible)
+                {
+                    CartasDefinitivas.Add(carta);
+                    HeroeEnemigo.GetComponent<EstadisticasHeroe>()
+                        .ManaDisponible -= carta.GetComponent<EstadisticasEsbirro>()
+                        .Coste;
+                }
+            }
+            foreach (Transform carta in CartasDefinitivas)
+            {
+                yield return new WaitForSeconds(TiempoPausa);
+                carta.SetParent(GameObject.Find("TableroEnemigo").transform);
+                carta.GetComponent<EstadisticasEsbirro>()
+                    .CartaJugada = true;
+                carta.GetComponent<EstadisticasEsbirro>()
+                    .CartaOculta = false;
+                if (GameObject.Find("TableroEnemigo").transform.childCount
+                >= MaxCartasTablero)
+                    break;
+            }
         }
     }
 
-    void EnemigoAtacarCartas()
+    IEnumerator EnemigoAtacarCartas()
     {
-        if (GameObject.Find("TableroEnemigo").transform.childCount == 0)
-            return;
-        foreach(Transform carta in GameObject.Find("TableroEnemigo").transform)
+        if (GameObject.Find("TableroEnemigo").transform.childCount > 0)
         {
-            if(!carta.GetComponent<EstadisticasEsbirro>()
-                    .CartaDormida && carta.GetComponent<EstadisticasEsbirro>()
-                    .Ataque > 0)
+            foreach (Transform carta in GameObject.Find("TableroEnemigo").transform)
             {
-                CartaSeleccionada = carta;
-                if(GameObject.Find("TableroJugador").transform.childCount == 0)
+                yield return new WaitForSeconds(TiempoPausa);
+                if (!carta.GetComponent<EstadisticasEsbirro>()
+                        .CartaDormida && carta.GetComponent<EstadisticasEsbirro>()
+                        .Ataque > 0)
                 {
-                    HeroeJugador.GetComponent<EstadisticasHeroe>()
-                        .Salud -= CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-                        .Ataque;
-                    if (CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-                        .Sigilo)
-                        CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-                        .Sigilo = false;
-
-                    CartaSeleccionada = null;
-                    CartaObjetivo = null;
-                    return;
-                }
-
-                foreach(Transform cartaJugador in GameObject.Find("TableroJugador").transform)
-                {
-                    if(cartaJugador.GetComponent<EstadisticasEsbirro>().
-                        Provocar)
+                    CartaSeleccionada = carta;
+                    if (GameObject.Find("TableroJugador").transform.childCount == 0)
                     {
-                        CartaObjetivo = cartaJugador;
+                        AtacarHeroeJugador();
                         break;
                     }
-                }
-                if(CartaObjetivo == null)
-                {
-                    CartaObjetivo = GameObject.Find("TableroJugador").transform
-                        .GetChild(UnityEngine.Random.Range(0, 
-                        GameObject.Find("TableroJugador").transform.childCount));
-                }
+                    List<Transform> CartasAtacables = new List<Transform>();
+                    foreach (Transform cartaJugador in GameObject.Find("TableroJugador").transform)
+                    {
+                        if (cartaJugador.GetComponent<EstadisticasEsbirro>().
+                            Provocar)
+                        {
+                            CartaObjetivo = cartaJugador;
+                            break;
+                        }
+                        if (!cartaJugador.GetComponent<EstadisticasEsbirro>().
+                            Sigilo)
+                            CartasAtacables.Add(cartaJugador);
+                    }
 
-                IntercambiarDañoCartas();
-                CartaSeleccionada = null;
-                CartaObjetivo = null;
+                    if (CartasAtacables.Count == 0 &&
+                        CartaObjetivo == null)
+                    {
+                        AtacarHeroeJugador();
+                        break;
+                    }
+                    else if (CartaObjetivo == null)
+                    {
+                        CartaObjetivo = CartasAtacables[UnityEngine.Random.Range(0,
+                            CartasAtacables.Count)];
+                    }
+
+                    IntercambiarDañoCartas();
+                    CartaSeleccionada = null;
+                    CartaObjetivo = null;
+                }
             }
         }
+    }
+
+    void AtacarHeroeJugador()
+    {
+        HeroeJugador.GetComponent<EstadisticasHeroe>()
+                            .Salud -= CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+                            .Ataque;
+        if (CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+            .Sigilo)
+            CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+            .Sigilo = false;
+
+        CartaSeleccionada = null;
+        CartaObjetivo = null;
     }
 
     public void MostrarMensaje(string mensaje)
@@ -332,7 +386,7 @@ public class GameController : MonoBehaviour
     {
         GameObject.Find("Avisos").GetComponent<TextMeshProUGUI>()
             .text = mensaje;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(TiempoPausa);
         GameObject.Find("Avisos").GetComponent<TextMeshProUGUI>()
             .text = "";
     }

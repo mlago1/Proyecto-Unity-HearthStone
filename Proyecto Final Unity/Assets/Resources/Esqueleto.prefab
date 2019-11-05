@@ -220,7 +220,7 @@ MonoBehaviour:
   Descripcion: 'Provocar. Ultimo Aliento:'
   Imagen: {fileID: 2800000, guid: ecd5ffa91b957614c84ce0a6aaba1566, type: 3}
   Dorso: {fileID: 2800000, guid: 356c75f528940e947b1e75828c9dd2f7, type: 3}
-  Coste: 6
+  Coste: 4
   Ataque: 5
   Salud: 5
   CartaOculta: 0

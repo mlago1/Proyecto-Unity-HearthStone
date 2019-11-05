@@ -220,7 +220,7 @@ MonoBehaviour:
   Descripcion: Cargar. Escudo Divino
   Imagen: {fileID: 2800000, guid: f5d98d6a89322fd4795a9429457c8dcc, type: 3}
   Dorso: {fileID: 2800000, guid: 356c75f528940e947b1e75828c9dd2f7, type: 3}
-  Coste: 8
+  Coste: 5
   Ataque: 6
   Salud: 4
   CartaOculta: 0

@@ -5,6 +5,14 @@ public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
 {
     public void OnPointerClick(PointerEventData eventData)
     {
+        if (GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
+        {
+            GameObject.Find("GameController").GetComponent<GameController>()
+            .MostrarMensaje("No es tu turno");
+            return;
+        }
+
         if (GetComponent<EstadisticasEsbirro>().Ataque == 0
             && transform.parent.name == "TableroJugador")
         {
@@ -95,7 +103,7 @@ public class EsbirroAtacante : MonoBehaviour, IPointerClickHandler
         return true;
     }
 
-    public bool ComprobarExisteProvocar()
+    bool ComprobarExisteProvocar()
     {
         if (!GetComponent<EstadisticasEsbirro>().Provocar)
         {

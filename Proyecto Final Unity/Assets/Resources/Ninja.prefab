@@ -164,7 +164,7 @@ GameObject:
   - component: {fileID: -882324958128220842}
   - component: {fileID: 884022507158170031}
   m_Layer: 5
-  m_Name: Mago 1
+  m_Name: Ninja
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -220,7 +220,7 @@ MonoBehaviour:
   Descripcion: Sigilo. Veneno
   Imagen: {fileID: 2800000, guid: 466a129ba42ee324e8ed31512d2ce010, type: 3}
   Dorso: {fileID: 2800000, guid: 356c75f528940e947b1e75828c9dd2f7, type: 3}
-  Coste: 7
+  Coste: 5
   Ataque: 3
   Salud: 1
   CartaOculta: 0

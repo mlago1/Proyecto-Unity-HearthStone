@@ -1,20 +1,8 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.EventSystems;
 
 public class HeroeAtacable : MonoBehaviour, IPointerClickHandler
 {
-    void Start()
-    {
-        
-    }
-
-    void Update()
-    {
-        
-    }
-
     public void OnPointerClick(PointerEventData eventData)
     {
         if (!ComprobarExisteProvocar())
@@ -37,7 +25,6 @@ public class HeroeAtacable : MonoBehaviour, IPointerClickHandler
 
             GameObject.Find("GameController").GetComponent<GameController>()
             .CartaSeleccionada = null;
-
 
             GameObject.Find("GameController").GetComponent<GameController>()
             .HayCartaSeleccionada = false;

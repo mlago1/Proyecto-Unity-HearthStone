@@ -7,6 +7,13 @@ public class ZonaCaidaCartas : MonoBehaviour, IDropHandler, IPointerEnterHandler
     {
         if (transform.name == "TableroJugador")
         {
+            if (GameObject.Find("GameController").GetComponent<GameController>()
+            .botonPulsado)
+            {
+                GameObject.Find("GameController").GetComponent<GameController>()
+                .MostrarMensaje("No es tu turno");
+                return;
+            }
             EsbirroArrastrable a = eventData.pointerDrag.
                 GetComponent<EsbirroArrastrable>();
 
