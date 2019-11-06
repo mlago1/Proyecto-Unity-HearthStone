@@ -9,6 +9,13 @@ public class Botones : MonoBehaviour
         {
             case "Jugar":
                 SceneManager.LoadScene("Partida"); break;
+            case "Salir":
+                Application.Quit(); break;
+            case "VolverMenu":
+            case "Rendirse":
+                SceneManager.LoadScene("Menu"); break;
+            case "Instrucciones":
+                SceneManager.LoadScene("Instrucciones"); break;
         }
     }
 }

@@ -9,11 +9,14 @@ using System.Collections.Generic;
 
 public class GameController : MonoBehaviour
 {
-    public static int MaxCartasTablero = 4;
-    public static int MaxCartasMano = 4;
+    public static int MaxCartasTablero = 6;
+    public static int MaxCartasMano = 6;
     public static int TiempoTurnos = 40;
     public static int TiempoPausa = 2;
     static int cartasRepetidasPorMazo = 4;
+
+    string[] nombresCartas = { "Caballero", "Mago","Esqueleto"
+        ,"Ninja","Piedra","Tanque"};
 
     public Transform CartaSeleccionada { get; set; }
     public Transform CartaObjetivo { get; set; }
@@ -50,24 +53,19 @@ public class GameController : MonoBehaviour
 
     void CargarMazos()
     {
-        DirectoryInfo dir = new DirectoryInfo("Assets/Resources");
-        FileInfo[] info = dir.GetFiles("*.prefab");
         for (int i = 0; i < cartasRepetidasPorMazo; i++)
-            foreach (FileInfo f in info)
+        {
+            foreach (string s in nombresCartas)
             {
-                string fullPath = f.FullName.Replace(@"\", "/");
-                string assetPath = fullPath.Replace(Application.dataPath, "");
-                assetPath = assetPath.Replace("/Resources/", "");
-                assetPath = assetPath.Replace(".prefab", "");
-
                 GameObject carta = Instantiate(
-                    Resources.Load(assetPath, typeof(GameObject))) as GameObject;
+                        Resources.Load(s, typeof(GameObject))) as GameObject;
                 carta.transform.SetParent(GameObject.Find("MazoJugador").transform);
 
                 carta = Instantiate(
-                    Resources.Load(assetPath, typeof(GameObject))) as GameObject;
+                    Resources.Load(s, typeof(GameObject))) as GameObject;
                 carta.transform.SetParent(GameObject.Find("MazoEnemigo").transform);
             }
+        }
     }
 
     void ActualizarTiempo()
@@ -102,7 +100,6 @@ public class GameController : MonoBehaviour
 
     private void ComprobarSaludHeroes() 
     {
-        //TEMPORAL
         if(HeroeJugador.GetComponent<EstadisticasHeroe>()
             .Salud <= 0 || HeroeEnemigo.GetComponent<EstadisticasHeroe>()
             .Salud <= 0)
@@ -176,7 +173,7 @@ public class GameController : MonoBehaviour
         ActualizarMana(HeroeEnemigo);
         ActivarCartasDormidas("TableroEnemigo");
         StartCoroutine(RobarCarta(HeroeEnemigo, "MazoEnemigo", "ManoEnemigo", true, 1));
-        HacerJugarEnemigo();
+        StartCoroutine(HacerJugarEnemigo());
         esTurnoJugador = true;
         yield return new WaitForSeconds(TiempoPausa*2);
         botonPulsado = false;
@@ -254,9 +251,10 @@ public class GameController : MonoBehaviour
         }
     }
 
-    void HacerJugarEnemigo()
+    IEnumerator HacerJugarEnemigo()
     {
         StartCoroutine(EnemigoJugarCartas());
+        yield return new WaitForSeconds(TiempoPausa);
         StartCoroutine(EnemigoAtacarCartas());
     }
 
@@ -324,11 +322,6 @@ public class GameController : MonoBehaviour
                         .Ataque > 0)
                 {
                     CartaSeleccionada = carta;
-                    if (GameObject.Find("TableroJugador").transform.childCount == 0)
-                    {
-                        AtacarHeroeJugador();
-                        break;
-                    }
                     List<Transform> CartasAtacables = new List<Transform>();
                     foreach (Transform cartaJugador in GameObject.Find("TableroJugador").transform)
                     {
@@ -343,38 +336,33 @@ public class GameController : MonoBehaviour
                             CartasAtacables.Add(cartaJugador);
                     }
 
-                    if (CartasAtacables.Count == 0 &&
-                        CartaObjetivo == null)
+                    if (CartaObjetivo == null)
                     {
-                        AtacarHeroeJugador();
-                        break;
-                    }
-                    else if (CartaObjetivo == null)
-                    {
-                        CartaObjetivo = CartasAtacables[UnityEngine.Random.Range(0,
-                            CartasAtacables.Count)];
+                        if (CartasAtacables.Count == 0)
+                        {
+                            HeroeJugador.GetComponent<EstadisticasHeroe>()
+                                 .Salud -= CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+                                 .Ataque;
+                            if (CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+                                .Sigilo)
+                                CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
+                                .Sigilo = false;
+                        }
+                        else
+                            CartaObjetivo = CartasAtacables[UnityEngine.Random.Range(0,
+                                CartasAtacables.Count)];
                     }
 
-                    IntercambiarDañoCartas();
+                    if(CartaSeleccionada != null &&
+                        CartaObjetivo != null)
+                        IntercambiarDañoCartas();
+
                     CartaSeleccionada = null;
                     CartaObjetivo = null;
                 }
             }
         }
-    }
-
-    void AtacarHeroeJugador()
-    {
-        HeroeJugador.GetComponent<EstadisticasHeroe>()
-                            .Salud -= CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-                            .Ataque;
-        if (CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-            .Sigilo)
-            CartaSeleccionada.GetComponent<EstadisticasEsbirro>()
-            .Sigilo = false;
-
-        CartaSeleccionada = null;
-        CartaObjetivo = null;
+        yield return new WaitForSeconds(TiempoPausa);
     }
 
     public void MostrarMensaje(string mensaje)

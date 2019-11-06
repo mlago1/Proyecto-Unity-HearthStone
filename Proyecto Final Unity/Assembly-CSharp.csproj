@@ -64,6 +64,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Scripts\Botones.cs" />
+    <Compile Include="Assets\Scripts\ControladorInstrucciones.cs" />
     <Compile Include="Assets\Scripts\EsbirroArrastrable.cs" />
     <Compile Include="Assets\Scripts\EsbirroAtacante.cs" />
     <Compile Include="Assets\Scripts\EstadisticasEsbirro.cs" />

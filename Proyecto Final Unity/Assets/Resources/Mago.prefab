@@ -217,7 +217,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Nombre: Mago
-  Descripcion: 'Grito De Batalla: '
+  Descripcion: 
   Imagen: {fileID: 2800000, guid: c4b8cf8b421238b489f77178e8f5aff1, type: 3}
   Dorso: {fileID: 2800000, guid: 356c75f528940e947b1e75828c9dd2f7, type: 3}
   Coste: 2
